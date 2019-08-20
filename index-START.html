@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+  <script>
+      // i am listening to a keydown (keypress) event in the window, then using
+      // de-structuring, i am accessing the keyCode key/value in the event object  (e)
+      // that an eventlistener passes to the callback
+      window.addEventListener('keydown', ({ keyCode }) => {
+      // i am selecting the corresponding audio that has data-key attribute value
+      // corrresponding to the key pressed
+      const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+      // i am selecting the corresponding key element in order to add some styling effects.
+      const key = document.querySelector(`.key[data-key="${keyCode}"]`);
+      // stop the function from running all together if unavailable key is pressed
+      if (!audio) return;
+      //rewind the audio file to 0 so we can repetitively play the audio files,an hack for the long files 
+      audio.currentTime = 0
+      audio.play();
+      // adding the .play class to style pressed button if the keycode is accounted for.
+      key.classList.add('playing');
+    });
+
+    const removeTransition = ({propertyName}) => {
+      if (propertyName !== 'transform') return; // skip if it is not a transform 
+      this.classList.remove('playing');
+    }
+
+    const keys = document.querySelectorAll(`.key`);
+
+    // listening for the transition end event so we can call our callback function that removes a class
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+
+
+  </script>
+
+
+</body>
+
+</html>
